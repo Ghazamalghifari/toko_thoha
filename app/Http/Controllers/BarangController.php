@@ -34,9 +34,7 @@ class BarangController extends Controller
         }
         $html = $htmlBuilder
         ->addColumn(['data' => 'nama_barang', 'name' => 'nama_barang', 'title' => 'Nama']) 
-        ->addColumn(['data' => 'harga_barang', 'name' => 'harga_barang', 'title' => 'Nama Barang']) 
-        ->addColumn(['data' => 'satuan_barang.nama_satuan_barang', 'name' => 'satuan_barang.nama_satuan_barang', 'title' => 'Satuan']) 
-        ->addColumn(['data' => 'kategori_barang.nama_kategori_barang', 'name' => 'kategori_barang.nama_kategori_barang', 'title' => 'Kategori']) 
+        ->addColumn(['data' => 'harga_barang', 'name' => 'harga_barang', 'title' => 'Nama Barang'])  
         ->addColumn(['data' => 'kelontongan', 'name' => 'kelontongan', 'title' => 'Kelontongan']) 
         ->addColumn(['data' => 'jumlah_barang', 'name' => 'jumlah_barang', 'title' => 'Jumlah']) 
         ->addColumn(['data' => 'keterangan', 'name' => 'keterangan', 'title' => 'Keterangan']) 
@@ -63,8 +61,33 @@ class BarangController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    { 
+         $this->validate($request, [
+            'nama_barang'     => 'required|unique:barangs,nama_barang',
+            'harga_barang'     => 'required',
+            'id_satuan_barang'     => 'required|exists:satuan_barangs,id',
+            'id_kategori_barang'     => 'required|exists:kategori_barangs,id',
+            'kelontongan'     => 'required',
+            'jumlah_barang'     => 'required',
+            'keterangan'     => 'required',
+            ]);
+
+
+         $barang = Barang::create([
+            'nama_barang' =>$request->nama_barang,
+            'harga_barang' =>$request->harga_barang,
+            'id_satuan_barang' =>$request->id_satuan_barang,
+            'id_kategori_barang' =>$request->id_kategori_barang,
+            'kelontongan' =>$request->kelontongan,
+            'jumlah_barang' =>$request->jumlah_barang,
+            'keterangan' =>$request->keterangan, 
+            ]);
+ 
+         Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"Berhasil Menambah Barang $request->nama_barang"
+            ]);
+        return redirect()->route('master-barang.index');
     }
 
     /**
