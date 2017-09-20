@@ -30,34 +30,26 @@
 	</div>
 </div>
 
- 
-
 @if (isset($master_users) && $master_users)  
-<div class="form-group{{ $errors->has('role_id[]') ? ' has-error' : '' }}">
-	{!! Form::label('role_id[]', 'Otoritas', ['class'=>'col-md-2 control-label']) !!}
+<div class="form-group{{ $errors->has('role_id') ? ' has-error' : '' }}">
+	{!! Form::label('role_id', 'Otoritas', ['class'=>'col-md-2 control-label']) !!}
 	<div class="col-md-4">
-		{!! Form::select('role_id[]', []+App\Role::pluck('display_name','id')->all(), null, ['class'=>'form-control js-selectize-multi-edit role-id', 'placeholder' => 'Pilih Otoritas']) !!}
-		{!! $errors->first('role_id[]', '<p class="help-block">:message</p>') !!}
+		{!! Form::select('role_id', []+App\Role::pluck('name','id')->all(), $master_users->role->role_id, ['class'=>'form-control js-selectize-reguler', 'placeholder' => 'Pilih Otoritas']) !!}
+		{!! $errors->first('role_id', '<p class="help-block">:message</p>') !!}
 	</div>
-</div> 
+</div>
+
+		{!! Form::hidden('role_lama', $master_users->role->role_id, ['class'=>'form-control','required','autocomplete'=>'off']) !!}
+
 @else
-<div class="form-group{{ $errors->has('role_id[]') ? ' has-error' : '' }}">
-	{!! Form::label('role_id[]', 'Otoritas', ['class'=>'col-md-2 control-label']) !!}
+<div class="form-group{{ $errors->has('role_id') ? ' has-error' : '' }}">
+	{!! Form::label('role_id', 'Otoritas', ['class'=>'col-md-2 control-label']) !!}
 	<div class="col-md-4">
-		{!! Form::select('role_id[]', []+App\Role::pluck('display_name','id')->all(), null, ['class'=>'form-control js-selectize-multi role-id', 'placeholder' => 'Pilih Otoritas']) !!}
-		{!! $errors->first('role_id[]', '<p class="help-block">:message</p>') !!}
+		{!! Form::select('role_id', []+App\Role::pluck('name','id')->all(), null, ['class'=>'form-control js-selectize-reguler', 'placeholder' => 'Pilih Otoritas']) !!}
+		{!! $errors->first('role_id', '<p class="help-block">:message</p>') !!}
 	</div>
 </div>
 @endif
-<div class="form-group{{ $errors->has('id_angkatan') ? ' has-error' : '' }}" style="display: none;" id="data_angkatan">
-	{!! Form::label('id_angkatan', 'Angkatan', ['class'=>'col-md-2 control-label']) !!}
-	<div class="col-md-4">
-		{!! Form::select('id_angkatan', []+App\Angkatan::pluck('nama_angkatan','id')->all(), null, ['class'=>'form-control js-selectize-reguler', 'placeholder' => 'Pilih Angkatan','id'=>'id_angkatan']) !!}
-		{!! $errors->first('id_angkatan', '<p class="help-block">:message</p>') !!}
-	</div>
-</div> 
-
-
 <div class="form-group">
 	<div class="col-md-4 col-md-offset-2">
 		{!! Form::submit('Simpan', ['class'=>'btn btn-primary']) !!}

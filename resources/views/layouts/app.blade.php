@@ -49,48 +49,22 @@
 
 
                     @if (!Auth::guest())
-                        <li><a href="{{ route('home') }}">Beranda</a></li>
+                        <li><a href="{{ url('/home') }}">Beranda</a></li>
                     @endif
                     @role('admin')
-                        <li><a href="{{ route('penjadwalans.index') }}">Penjadwalan</a></li>
+                        <li><a href="#">Penjualan</a></li>
                         <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                    Master Data <span class="caret"></span>
                                 </a>
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li><a href="{{ route('master_ruangans.index') }}">Ruangan</a></li>
-                            <li><a href="{{ route('master_users.index') }}">User</a></li><li><a href="{{ route('angkatan.index') }}">Angkatan</a></li>
-                            <li><a href="{{ route('master_mata_kuliahs.index') }}">Mata Kuliah</a></li> 
-                            <li><a href="{{ route('master_blocks.index') }}">Blok</a></li>   
-                            <li><a href="{{ route('modul.index') }}">Modul</a></li>  
+                            <li><a href="{{ route('master_users.index') }}">User</a></li> 
+                            <li><a href="{{ route('master-barang.index') }}">Barang</a></li> 
+                            <li><a href="{{ route('master-kategori-barang.index') }}">Kategori Barang</a></li> 
+                            <li><a href="{{ route('master-satuan-barang.index') }}">Satuan Barang</a></li> 
                           </ul>
-                        </li>
-                        <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                   Setting <span class="caret"></span>
-                                </a>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">                           
-                            <li><a href="{{ route('settingwaktu.index') }}">Setting Waktu</a></li>             
-                            <li><a href="{{ route('setting_slide.index') }}">Setting Slide</a></li>
-                          </ul>
-                        </li>
-
-                        <!-- DROPDOWN LAPORAN -->
-                        <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                   Laporan <span class="caret"></span>
-                                </a>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">                           
-                            <li><a href="{{ route('laporan_presensi_mahasiswa.index') }}">Laporan Rekap Presensi Mahasiswa</a></li>             
-                          </ul>
-                        </li>
-                        <!-- DROPDOWN LAPORAN -->
-                    @endrole  
-
-                    @role('pimpinan')  
-                        <li><a href="{{ route('penjadwalans.index') }}">Penjadwalan</a></li> 
-                        <li><a href="{{ route('master_blocks.index') }}">Blok</a></li>      
-                    @endrole 
+                        </li> 
+                    @endrole   
                     </ul>
 
                     <!-- Right Side Of Navbar -->

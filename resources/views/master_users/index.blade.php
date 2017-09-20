@@ -34,29 +34,15 @@
 					    </ul>
 					  </div>  
 					</div>
-
-					<div class="col-md-1" style="padding-left: 4%">
-						  <div class="dropdown"">
-					    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Mahasiswa Angkatan
-					    <span class="caret"></span></button>
-					    <ul class="dropdown-menu"> 
-					        @foreach($angkatan as $angkatans)
-							    <li><a href="{{ route('master_users.filter_angkatan',$angkatans->id) }}">{{ $angkatans->nama_angkatan }}</a></li>
-							@endforeach
-					    </ul>
-					  </div>  
-					</div>
-
-					<div class="col-md-2">
-						  <div class="dropdown" style="padding-left: 70%">
+  
+					<div class="col-md-2"  style="padding-left: 4%"> 
 					    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Otoritas User
 					    <span class="caret"></span></button>
 					    <ul class="dropdown-menu"> 
 					        @foreach($role as $roles)
 							    <li><a href="{{ route('master_users.filter_otoritas',$roles->id) }}">{{ $roles->display_name }}</a></li>
 							@endforeach
-					    </ul>
-					  </div>  
+					    </ul> 
 					</div>
 				</div>
 

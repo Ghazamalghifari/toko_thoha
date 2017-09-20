@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Role;
 use App\User_otoritas;
-use Auth;
-use App\Angkatan;
+use Auth; 
 use Session;
 
 class MasterUserController extends Controller
@@ -59,23 +58,6 @@ class MasterUserController extends Controller
                         'model_role'     => $role,
                         'id_role' => $user->id,
                         ]); 
-                }) 
-            ->addColumn('angkatan',function($user){
-                $role = User_otoritas::with('role')->where('user_id',$user->id)->where('role_id',3)->count();
-                if ($role > 0 ) {
-                    if ($user->id_angkatan != null) {
-                        # code...
-                    $angkatan = Angkatan::find($user->id_angkatan);
-                    return $angkatan->nama_angkatan;
-                    }
-                    else{
-                    return "";
-                        
-                    }
-                }else{
-                    return "";
-                }
-
                 })->make(true);
         }
         $html = $htmlBuilder
@@ -83,16 +65,14 @@ class MasterUserController extends Controller
         ->addColumn(['data' => 'email', 'name' => 'email', 'title' => 'Username']) 
         ->addColumn(['data' => 'no_hp', 'name' => 'no_hp', 'title' => 'Nomor Hp', 'orderable' => false])
         ->addColumn(['data' => 'alamat', 'name' => 'alamat', 'title' => 'Alamat', 'orderable' => false])
-        ->addColumn(['data' => 'role', 'name' => 'role', 'title' => 'Otoritas', 'orderable' => false, 'searchable'=>false])
-        ->addColumn(['data' => 'angkatan', 'name' => 'angkatan', 'title' => 'Angkatan', 'orderable' => false, 'searchable'=>false])
+        ->addColumn(['data' => 'role', 'name' => 'role', 'title' => 'Otoritas', 'orderable' => false, 'searchable'=>false]) 
         ->addColumn(['data' => 'reset', 'name' => 'reset', 'title' => 'Reset Password', 'orderable' => false, 'searchable'=>false])
         ->addColumn(['data' => 'konfirmasi', 'name' => 'konfirmasi', 'title' => 'Konfirmasi', 'orderable' => false, 'searchable'=>false])
         ->addColumn(['data' => 'action', 'name' => 'action', 'title' => '', 'orderable' => false, 'searchable'=>false]);
-
-        $angkatan = Angkatan::all();
+ 
         $role = Role::all();
 
-        return view('master_users.index',['angkatan' => $angkatan,'role' => $role])->with(compact('html'));
+        return view('master_users.index',['role' => $role])->with(compact('html'));
     }
 
  
@@ -131,111 +111,22 @@ class MasterUserController extends Controller
             ->addColumn('role', function($user){
                 $role = Role::where('id',$user->role->role_id)->first();
                 return $role->display_name;
-                })
-            ->addColumn('angkatan',function($user){
-                if ($user->role->role_id == 3) {
-                    if ($user->id_angkatan != null) {
-                        # code...
-                    $angkatan = Angkatan::find($user->id_angkatan);
-                    return $angkatan->nama_angkatan;
-                    }
-                    else{
-                    return "";
-                        
-                    }
-                }else{
-                    return "";
-                }
-
                 })->make(true);
         }
         $html = $htmlBuilder
         ->addColumn(['data' => 'name', 'name' => 'name', 'title' => 'Nama'])
         ->addColumn(['data' => 'email', 'name' => 'email', 'title' => 'Username']) 
         ->addColumn(['data' => 'no_hp', 'name' => 'no_hp', 'title' => 'Nomor Hp', 'orderable' => false])
-        ->addColumn(['data' => 'alamat', 'name' => 'alamat', 'title' => 'Alamat', 'orderable' => false])
-        ->addColumn(['data' => 'role', 'name' => 'role', 'title' => 'Otoritas', 'orderable' => false, 'searchable'=>false])
-        ->addColumn(['data' => 'angkatan', 'name' => 'angkatan', 'title' => 'Angkatan', 'orderable' => false, 'searchable'=>false])
+        ->addColumn(['data' => 'alamat', 'name' => 'alamat', 'title' => 'Alamat', 'orderable' => false]) 
         ->addColumn(['data' => 'reset', 'name' => 'reset', 'title' => 'Reset Password', 'orderable' => false, 'searchable'=>false])
         ->addColumn(['data' => 'konfirmasi', 'name' => 'konfirmasi', 'title' => 'Konfirmasi', 'orderable' => false, 'searchable'=>false])
         ->addColumn(['data' => 'action', 'name' => 'action', 'title' => '', 'orderable' => false, 'searchable'=>false]);
-
-        $angkatan = Angkatan::all();
+ 
         $role = Role::all();
 
-        return view('master_users.index',['angkatan' => $angkatan,'role' => $role])->with(compact('html'));
+        return view('master_users.index',['role' => $role])->with(compact('html'));
     }
-
-    public function filter_angkatan(Request $request, Builder $htmlBuilder,$id)
-    {
-        //
-        if ($request->ajax()) {
-            # code...
-            $master_users = User::with('role')->where('id_angkatan',$id);
-            return Datatables::of($master_users)
-            ->addColumn('action', function($master_user){
-                    return view('datatable._action', [
-                        'model'     => $master_user,
-                        'form_url'  => route('master_users.destroy', $master_user->id),
-                        'edit_url'  => route('master_users.edit', $master_user->id),
-                        'confirm_message'   => 'Yakin Mau Menghapus User ' . $master_user->name . '?'
-                        ]);
-                })
-            ->addColumn('konfirmasi', function($user_konfirmasi){
-                    return view('master_users._action', [
-                        'model'     => $user_konfirmasi,
-                        'confirm_message'   => 'Apakah Anda Yakin Ingin Meng Konfirmasi User ' . $user_konfirmasi->name . '?',
-                        'no_confirm_message'   => 'Apakah Anda Yakin Tidak Meng Konfirmasi User ' . $user_konfirmasi->name . '?',
-                        'konfirmasi_url' => route('master_users.konfirmasi', $user_konfirmasi->id),
-                        'no_konfirmasi_url' => route('master_users.no_konfirmasi', $user_konfirmasi->id),
-                        ]);
-                })//Konfirmasi User Apabila Bila Status User 1 Maka User sudah di konfirmasi oleh admin dan apabila status user 0 maka user belum di konfirmasi oleh admin
-
-            ->addColumn('reset', function($reset){
-                    return view('master_users._action_reset', [
-                        'model'     => $reset,
-                        'confirm_message'   => 'Apakah Anda Yakin Ingin Me Reset Password User ' . $reset->name . '?',
-                        'reset_url' => route('master_users.reset', $reset->id),
-                        ]);
-                })//Reset Password apabila di klik tombol reset password maka password menjadi 123456
-            ->addColumn('role', function($user){
-                $role = Role::where('id',$user->role->role_id)->first();
-                return $role->display_name;
-                })
-            ->addColumn('angkatan',function($user){
-                if ($user->role->role_id == 3) {
-                    if ($user->id_angkatan != null) {
-                        # code...
-                    $angkatan = Angkatan::find($user->id_angkatan);
-                    return $angkatan->nama_angkatan;
-                    }
-                    else{
-                    return "";
-                        
-                    }
-                }else{
-                    return "";
-                }
-
-                })->make(true);
-        }
-        $html = $htmlBuilder
-        ->addColumn(['data' => 'name', 'name' => 'name', 'title' => 'Nama'])
-        ->addColumn(['data' => 'email', 'name' => 'email', 'title' => 'Username']) 
-        ->addColumn(['data' => 'no_hp', 'name' => 'no_hp', 'title' => 'Nomor Hp', 'orderable' => false])
-        ->addColumn(['data' => 'alamat', 'name' => 'alamat', 'title' => 'Alamat', 'orderable' => false])
-        ->addColumn(['data' => 'role', 'name' => 'role', 'title' => 'Otoritas', 'orderable' => false, 'searchable'=>false])
-        ->addColumn(['data' => 'angkatan', 'name' => 'angkatan', 'title' => 'Angkatan', 'orderable' => false, 'searchable'=>false])
-        ->addColumn(['data' => 'reset', 'name' => 'reset', 'title' => 'Reset Password', 'orderable' => false, 'searchable'=>false])
-        ->addColumn(['data' => 'konfirmasi', 'name' => 'konfirmasi', 'title' => 'Konfirmasi', 'orderable' => false, 'searchable'=>false])
-        ->addColumn(['data' => 'action', 'name' => 'action', 'title' => '', 'orderable' => false, 'searchable'=>false]);
-
-        $angkatan = Angkatan::all();
-        $role = Role::all();
-
-        return view('master_users.index',['angkatan' => $angkatan,'role' => $role])->with(compact('html'));
-    }
-
+ 
     public function filter_otoritas(Request $request, Builder $htmlBuilder,$id)
     {
         //
@@ -275,22 +166,6 @@ class MasterUserController extends Controller
             ->addColumn('role', function($user){
                 $role = Role::where('id',$user->role->role_id)->first();
                 return $role->display_name;
-                })
-            ->addColumn('angkatan',function($user){
-                if ($user->role->role_id == 3) {
-                    if ($user->id_angkatan != null) {
-                        # code...
-                    $angkatan = Angkatan::find($user->id_angkatan);
-                    return $angkatan->nama_angkatan;
-                    }
-                    else{
-                    return "";
-                        
-                    }
-                }else{
-                    return "";
-                }
-
                 })->make(true);
         }
         $html = $htmlBuilder
@@ -298,16 +173,14 @@ class MasterUserController extends Controller
         ->addColumn(['data' => 'email', 'name' => 'email', 'title' => 'Username']) 
         ->addColumn(['data' => 'no_hp', 'name' => 'no_hp', 'title' => 'Nomor Hp', 'orderable' => false])
         ->addColumn(['data' => 'alamat', 'name' => 'alamat', 'title' => 'Alamat', 'orderable' => false])
-        ->addColumn(['data' => 'role', 'name' => 'role', 'title' => 'Otoritas', 'orderable' => false, 'searchable'=>false])
-        ->addColumn(['data' => 'angkatan', 'name' => 'angkatan', 'title' => 'Angkatan', 'orderable' => false, 'searchable'=>false])
+        ->addColumn(['data' => 'role', 'name' => 'role', 'title' => 'Otoritas', 'orderable' => false, 'searchable'=>false]) 
         ->addColumn(['data' => 'reset', 'name' => 'reset', 'title' => 'Reset Password', 'orderable' => false, 'searchable'=>false])
         ->addColumn(['data' => 'konfirmasi', 'name' => 'konfirmasi', 'title' => 'Konfirmasi', 'orderable' => false, 'searchable'=>false])
         ->addColumn(['data' => 'action', 'name' => 'action', 'title' => '', 'orderable' => false, 'searchable'=>false]);
-
-        $angkatan = Angkatan::all();
+ 
         $role = Role::all();
 
-        return view('master_users.index',['angkatan' => $angkatan,'role' => $role])->with(compact('html'));
+        return view('master_users.index',['role' => $role])->with(compact('html'));
     }
 
     public function konfirmasi($id){ 
@@ -365,24 +238,21 @@ class MasterUserController extends Controller
         //
          $this->validate($request, [
             'name'   => 'required',
-            'email'     => 'required|unique:users,email',
-            'no_hp'    => 'required',
+            'email'     => 'required|unique:users,email', 
+            'no_hp'    => 'required', 
             'alamat'    => 'required',
             'role_id'    => 'required', 
             ]);
 
-
          $user_baru = User::create([ 
             'name' =>$request->name,
-            'email'=>$request->email,
+            'email'=>$request->email, 
             'no_hp'=>$request->no_hp,
-            'alamat'=>$request->alamat,
-            'id_angkatan' => $request->id_angkatan, 
+            'alamat'=>$request->alamat,  
             'password' => bcrypt('123456')]);
 
-            foreach ($request->role_id as $role) {  
-                $user_baru->attachRole($role);
-            }
+        $role_baru = Role::where('id',$request->role_id)->first();
+        $user_baru->attachRole($role_baru->id);
 
         Session::flash("flash_notification", [
             "level"=>"success",
@@ -396,13 +266,8 @@ class MasterUserController extends Controller
     {
         //
         $master_users = User::with('role')->find($id);
-        $role = User_otoritas::with('role')->where('user_id',$id)->get();
-            $data_role = '';
-            foreach ($role as $roles) { 
-              $data_role .= ( "'".$roles->role_id ."'," ); //untuk menampilkan data user yang sesuai ketika tambah
-            }    
 
-        return view('master_users.edit',['data_role'=>$data_role])->with(compact('master_users'));
+        return view('master_users.edit')->with(compact('master_users'));
     }
  
      public function update(Request $request, $id)
@@ -410,27 +275,27 @@ class MasterUserController extends Controller
         //
          $this->validate($request, [
             'name'   => 'required',
-            'email'     => 'required|unique:users,email,' .$id,
-            'no_hp'    => 'required',
+            'email'     => 'required|unique:users,email,' .$id, 
             'alamat'    => 'required',
-            'role_id'    => 'required', 
+            'no_hp'    => 'required',
+            'role_id'    => 'required',
+            'role_lama'    => 'required',
             ]);
 
-        $user = User::where('id', $id)->update([ 
+        $user = User::where('id', $id) ->update([ 
             'name' =>$request->name,
-            'email'=>$request->email,
-            'no_hp'=>$request->no_hp,
-            'alamat'=>$request->alamat, 
-            'id_angkatan' => $request->id_angkatan
+            'email'=>$request->email, 
+            'no_hp'=>$request->no_hp, 
+            'alamat'=>$request->alamat
             ]);
 
-            User_otoritas::where('user_id', $id)->delete();  
+        $role_lama = Role::where('id',$request->role_lama)->first();
+        $role_baru = Role::where('id',$request->role_id)->first();
+        $user_baru = User::find($id);
 
-            $user_baru = User::find($id);
-            foreach ($request->role_id as $role) {  
-                $user_baru->attachRole($role);
-            }
+        $user_baru->detachRole($role_lama->id);
 
+        $user_baru->attachRole($role_baru->id);
 
         Session::flash("flash_notification", [
             "level"=>"success",

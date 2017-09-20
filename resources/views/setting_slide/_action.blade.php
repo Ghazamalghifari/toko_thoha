@@ -1,1 +1,0 @@
-<a href="{{ $edit_url }}" class="btn btn-success">Edit</a>
