@@ -7,6 +7,7 @@ use Yajra\Datatables\Html\Builder;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\DB;
 use App\KategoriBarang; 
+use App\Barang; 
 use Auth; 
 use Session;
 
@@ -130,6 +131,25 @@ class KategoriBarangController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $barang = Barang::where('id_kategori_barang',$id); 
+ 
+        if ($barang->count() > 0) {
+        // menyiapkan pesan error
+        Session:: flash("flash_notification", [
+            "level"=>"danger",
+            "message"=>"Kategori Barang Tidak Bisa Di Hapus Karena Masih Memiliki Barang"
+            ]);
+
+        return redirect()->route('master-kategori-barang.index');  
+        }  
+        else{
+
+        KategoriBarang::destroy($id);
+        Session:: flash("flash_notification", [
+            "level"=>"danger",
+            "message"=>"Barang Berhasil Di Hapus"
+            ]);
+        return redirect()->route('master-kategori-barang.index');
+        }
     }
 }

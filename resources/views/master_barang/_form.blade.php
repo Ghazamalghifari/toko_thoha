@@ -57,7 +57,7 @@
 <div class="form-group{{ $errors->has('keterangan') ? ' has-error' : '' }}">
 	{!! Form::label('keterangan', 'Keterangan', ['class'=>'col-md-2 control-label']) !!}
 	<div class="col-md-4">
-		{!! Form::text('keterangan', null, ['class'=>'form-control','required','autocomplete'=>'off']) !!}
+		{!! Form::text('keterangan', null, ['class'=>'form-control','autocomplete'=>'off']) !!}
 		{!! $errors->first('keterangan', '<p class="help-block">:message</p>') !!}
 	</div>  
 </div>

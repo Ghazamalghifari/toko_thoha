@@ -21,6 +21,7 @@ class CreateBarangsTable extends Migration
             $table->integer('id_kategori_barang');
             $table->string('kelontongan');
             $table->string('jumlah_barang');
+            $table->string('keterangan');
             $table->timestamps();
         });
     }

@@ -6,18 +6,18 @@
 			<div class="col-md-12">
 				<ul class="breadcrumb">
 					<li><a href="{{ url('/home') }} ">Home</a></li>
-					<li><a href="{{ url('/admin/master-kategori-barang') }}">Kategori Barang</a></li>
-					<li class="active">Edit Kategori Barang</li>
+					<li><a href="{{ url('/admin/master-barang') }}">Barang</a></li>
+					<li class="active">Edit Barang</li>
 				</ul>
 
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h2 class="panel-title">Edit Kategori Barang</h2>
+						<h2 class="panel-title">Edit Barang</h2>
 					</div>
 
 					<div class="panel-body">
-						{!! Form::model($master_kategori_barang, ['url' => route('master-kategori-barang.update', $master_kategori_barang->id), 'method' => 'put', 'files'=>'true','class'=>'form-horizontal']) !!}
-						@include('master_kategori_barang._form')
+						{!! Form::model($master_barang, ['url' => route('master-barang.update', $master_barang->id), 'method' => 'put', 'files'=>'true','class'=>'form-horizontal']) !!}
+						@include('master_barang._form')
 						{!! Form::close() !!}
 					</div>
 				</div>
