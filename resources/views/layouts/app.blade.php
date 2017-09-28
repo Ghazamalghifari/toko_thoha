@@ -52,7 +52,7 @@
                         <li><a href="{{ url('/home') }}">Beranda</a></li>
                     @endif
                     @role('admin')
-                        <li><a href="#">Penjualan</a></li>
+                        <li><a href="{{ route('penjualan.index') }}">Penjualan</a></li>
                         <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                    Master Data <span class="caret"></span>

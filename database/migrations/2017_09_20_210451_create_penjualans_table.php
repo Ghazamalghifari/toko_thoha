@@ -17,8 +17,9 @@ class CreatePenjualansTable extends Migration
             $table->increments('id');
             $table->string('no_faktur');
             $table->string('keterangan');
-            $table->string('subtotal');
+            $table->string('subtotal')->nullable()->default(0);
             $table->string('user_buat'); 
+            $table->string('user_edit')->nullable();
             $table->timestamps();
         });
     }

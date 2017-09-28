@@ -18,6 +18,7 @@ class CreateTbsPenjualansTable extends Migration
             $table->string('session_id');
             $table->integer('id_barang');
             $table->integer('jumlah_barang');
+            $table->string('total_harga');
             $table->timestamps();
         });
     }

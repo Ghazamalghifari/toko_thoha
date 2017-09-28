@@ -15,10 +15,11 @@ class CreateEditTbsPenjualansTable extends Migration
     {
         Schema::create('edit_tbs_penjualans', function (Blueprint $table) {
             $table->increments('id_edit_tbs_penjualans');
-            $table->string('no_faktur');
-            $table->integer('id_produk');
-            $table->integer('jumlah_produk'); 
             $table->string('session_id');
+            $table->string('no_faktur');
+            $table->integer('id_barang');
+            $table->integer('jumlah_barang');
+            $table->string('total_harga');
             $table->timestamps();
         });
     }

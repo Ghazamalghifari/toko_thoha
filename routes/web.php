@@ -16,6 +16,7 @@ Route::get('/', 'HomeController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/welcome', 'HomeController@index');
 
 
 	Route::get('/ubah-password',[
@@ -31,12 +32,13 @@ Route::get('/home', 'HomeController@index');
 	]);
  
 
-Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'role:admin|pimpinan|pj_dosen']], function () {
-   
+Route::group(['middleware' => 'auth'], function()
+{
 	Route::resource('master_users', 'MasterUserController'); 
 	Route::resource('master-satuan-barang', 'SatuanBarangController');  
 	Route::resource('master-kategori-barang', 'KategoriBarangController'); 
 	Route::resource('master-barang', 'BarangController');  
+	Route::resource('penjualan', 'PenjualanController');
  
 	Route::get('master_users/filterkonfirmasi/{id}',[
 	'middleware' => ['auth'],
@@ -74,6 +76,54 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'role:admin|pimpinan|pj_
 	'uses' => 'MasterUserController@reset'
 	]);
 
+//proses penjualan
+
+	Route::post('/penjualan/proses-hapus-tbs-penjualan/{id}',[
+	'middleware' => ['auth'],
+	'as' => 'penjualan.proses_hapus_tbs_penjualan',
+	'uses' => 'PenjualanController@proses_hapus_tbs_penjualan'
+	]);
 
 
+	Route::post('/penjualan/proses-hapus-semua-tbs-penjualan/',[
+	'middleware' => ['auth'],
+	'as' => 'penjualan.proses_hapus_semua_tbs_penjualan',
+	'uses' => 'PenjualanController@proses_hapus_semua_tbs_penjualan'
+	]);
+
+	Route::post('/penjualan/proses-tambah-tbs-penjualan',[
+	'middleware' => ['auth'],
+	'as' => 'penjualan.proses_tambah_tbs_penjualan',
+	'uses' => 'PenjualanController@proses_tambah_tbs_penjualan'
+	]);
+
+	Route::get('/penjualan/proses-form-edit/{id}',[
+	'middleware' => ['auth'],
+	'as' => 'penjualan.proses_form_edit',
+	'uses' => 'PenjualanController@proses_form_edit'
+	]);
+
+	Route::post('/penjualan/proses-tambah-edit-tbs-penjualan/{id}',[
+	'middleware' => ['auth'],
+	'as' => 'penjualan.proses_tambah_edit_tbs_penjualan',
+	'uses' => 'PenjualanController@proses_tambah_edit_tbs_penjualan'
+	]); 
+
+	Route::post('/penjualan/proses-hapus-edit-tbs-penjualan/{id}',[
+	'middleware' => ['auth'],
+	'as' => 'penjualan.proses_hapus_edit_tbs_penjualan',
+	'uses' => 'PenjualanController@proses_hapus_edit_tbs_penjualan'
+	]);
+
+	Route::post('/penjualan/proses-edit-penjualan/{id}',[
+	'middleware' => ['auth'],
+	'as' => 'penjualan.proses_edit_penjualan',
+	'uses' => 'PenjualanController@proses_edit_penjualan'
+	]);
+
+	Route::post('/penjualan/proses-hapus-semua-edit-tbs-penjualan/{id}',[
+	'middleware' => ['auth'],
+	'as' => 'penjualan.proses_hapus_semua_edit_tbs_penjualan',
+	'uses' => 'PenjualanController@proses_hapus_semua_edit_tbs_penjualan'
+	]);
 });

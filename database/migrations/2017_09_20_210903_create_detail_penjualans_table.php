@@ -18,6 +18,7 @@ class CreateDetailPenjualansTable extends Migration
             $table->string('no_faktur');
             $table->integer('id_barang');
             $table->integer('jumlah_barang'); 
+            $table->string('total_harga');
             $table->timestamps();
         });
     }
