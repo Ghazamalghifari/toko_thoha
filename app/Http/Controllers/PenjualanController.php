@@ -560,7 +560,82 @@ class PenjualanController extends Controller
 
     public function proses_edit_penjualan(Request $request, $id)
     {
-        //
+        $data_penjualan = Penjualan::find($id);  
+        $session_id = session()->getId();
+        $user = Auth::user()->id; 
+
+        $hapus_detail_tbs_penjualan = DetailPenjualan::where('no_faktur', $data_penjualan->no_faktur)->delete(); 
+
+      //INSERT DETAIL ITEM MASUK
+        $data_produk_penjualan = EditTbsPenjualan::where('no_faktur', $data_penjualan->no_faktur);
+
+        if ($data_produk_penjualan->count() == 0) {
+
+           $pesan_alert = 
+               '<div class="container-fluid">
+                    <div class="alert-icon">
+                    <i class="material-icons">error</i>
+                    </div>
+                    <b>Gagal : Belum ada Produk Yang Di inputkan</b>
+                </div>';
+
+        Session::flash("flash_notification", [
+            "level"     => "danger",
+            "message"   => $pesan_alert
+        ]);
+
+          
+          return redirect()->back();
+        }
+ 
+        foreach ($data_produk_penjualan->get() as $data_tbs) {
+              $barang = Barang::find($data_tbs->id_barang);
+              $barang->jumlah_barang -= $data_tbs->jumlah_barang;
+              $barang->save();
+              
+            $detail_penjualan = DetailPenjualan::create([
+                'id_barang' =>$data_tbs->id_barang,              
+                'no_faktur' => $data_tbs->no_faktur,
+                'jumlah_barang' =>$data_tbs->jumlah_barang,
+                'total_harga' =>$data_tbs->total_harga,
+            ]);
+        }
+
+      //INSERT ITEM MASUK
+        if ($request->keterangan == "") {
+          $keterangan = "-";
+        }
+        else{
+          $keterangan = $request->keterangan;
+        }
+
+        $itemmasuk = Penjualan::find($id)->update([ 
+            'keterangan' =>$keterangan, 
+            'user_edit' => $user,
+            'subtotal' => $request->subtotal, 
+        ]);
+
+        $hapus_edit_tbs_penjualan = EditTbsPenjualan::where('no_faktur', $data_penjualan->no_faktur)->delete(); 
+
+
+        if (!$itemmasuk) {
+          return back();
+        }
+         
+        $pesan_alert = 
+               '<div class="container-fluid">
+                    <div class="alert-icon">
+                    <i class="material-icons">check</i>
+                    </div>
+                    <b>Sukses : Berhasil Melakukan Edit Transaksi Item Masuk Faktur "'.$data_penjualan->no_faktur.'"</b>
+                </div>';
+
+        Session::flash("flash_notification", [
+            "level"     => "success",
+            "message"   => $pesan_alert
+        ]);
+
+        return redirect()->route('penjualan.index');
     }
 
     //PROSES BATAL EDIT ITEM MASUK

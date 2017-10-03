@@ -40,6 +40,30 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('master-barang', 'BarangController');  
 	Route::resource('penjualan', 'PenjualanController');
  
+  	Route::post('master-barang/export-barang', [
+  	'middleware' => ['auth'],
+    'as'   => 'master-barang.export_barang',
+    'uses' => 'BarangController@export_barang'
+  	]);
+
+	Route::get('master-barang/filter-satuan-barang/{id}',[
+	'middleware' => ['auth'],
+	'as' => 'master-barang.filter_satuan_barang',
+	'uses' => 'BarangController@filter_satuan_barang'
+	]);
+
+	Route::get('master-barang/filter-kategori-barang/{id}',[
+	'middleware' => ['auth'],
+	'as' => 'master-barang.filter_kategori_barang',
+	'uses' => 'BarangController@filter_kategori_barang'
+	]);
+
+	Route::get('master-barang/filter-kelontongan-barang/{id}',[
+	'middleware' => ['auth'],
+	'as' => 'master-barang.filter_kelontongan_barang',
+	'uses' => 'BarangController@filter_kelontongan_barang'
+	]);
+
 	Route::get('master_users/filterkonfirmasi/{id}',[
 	'middleware' => ['auth'],
 	'as' => 'master_users.filter_konfirmasi',

@@ -20,6 +20,7 @@ class CreateEditTbsPenjualansTable extends Migration
             $table->integer('id_barang');
             $table->integer('jumlah_barang');
             $table->string('total_harga');
+            $table->string('status_barang')->nullable();
             $table->timestamps();
         });
     }
