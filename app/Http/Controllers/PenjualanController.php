@@ -27,7 +27,7 @@ class PenjualanController extends Controller
         //
         if ($request->ajax()) {
             # code...
-            $penjualan = Penjualan::select(['id','no_faktur','keterangan','subtotal','user_buat','user_edit','created_at','updated_at']);
+            $penjualan = Penjualan::with(['user_buat','user_edit']);
             return Datatables::of($penjualan)->addColumn('action', function($data){
             $detail_penjualan = DetailPenjualan::with(['barang'])->where('no_faktur',$data->no_faktur)->get();
                     return view('penjualan._action', [
@@ -44,9 +44,9 @@ class PenjualanController extends Controller
         }
         $html = $htmlBuilder
         ->addColumn(['data' => 'no_faktur', 'name' => 'no_faktur', 'title' => 'No Faktur'])  
-        ->addColumn(['data' => 'user_buat', 'name' => 'user_buat', 'title' => 'User Buat']) 
+        ->addColumn(['data' => 'user_buat.name', 'name' => 'user_buat.name', 'title' => 'User Buat']) 
         ->addColumn(['data' => 'created_at', 'name' => 'created_at', 'title' => 'Waktu Buat'])   
-        ->addColumn(['data' => 'user_edit', 'name' => 'user_edit', 'title' => 'User Edit'])  
+        ->addColumn(['data' => 'user_edit.name', 'name' => 'user_edit.name', 'title' => 'User Edit'])  
         ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Waktu Edit'])  
         ->addColumn(['data' => 'subtotal', 'name' => 'subtotal', 'title' => 'Subtotal'])  
         ->addColumn(['data' => 'keterangan', 'name' => 'keterangan', 'title' => 'keterangan'])
@@ -198,6 +198,59 @@ class PenjualanController extends Controller
     public function show($id)
     {
         //
+    }
+
+    public function export_penjualan(Request $request, Builder $htmlBuilder) {  
+            $this->validate($request, [
+          
+                'dari_tanggal'     => 'required',
+                'sampai_tanggal'    => 'required',
+                ]);  
+
+    $penjualan = Penjualan::with(['user_buat','user_edit'])->where('created_at' ,'>=',$request->dari_tanggal)->where('created_at','<=',$request->sampai_tanggal)->get();
+
+    $detail_penjualan = DetailPenjualan::with(['barang'])->where('no_faktur',$penjualan->no_faktur)->get()->groupBy('id');
+
+
+
+    Excel::create('Data Barang', function($excel) use ($penjualan,$detail_penjualan ) {
+      // Set property        
+      $excel->sheet('Data Barang', function($sheet) use ($penjualan,$detail_penjualan) {
+        $row = 1;
+        $sheet->row($row, [
+
+          'No Faktur',
+          'User Buat',
+          'Waktu Buat',
+          'User Edit',
+          'Waktu Edit',
+          'Subtotal',
+          'Keterangan'
+
+        ]);
+
+             
+        foreach ($penjualan as $penjualans) { 
+
+
+             $sheet->row(++$row, [
+            $penjualans->no_fakturo,
+            $penjualans->user_buat->name,
+            $penjualans->created_at,
+            $penjualans->user_edit->name,
+            $penjualans->updated_at,
+            $penjualans->subtotal,
+            $penjualans->keterangan
+            ]); 
+
+
+      }
+      
+      });
+
+    })->export('xls');
+
+        return redirect()->route('penjualan.index');
     }
 
     /**

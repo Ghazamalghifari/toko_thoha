@@ -46,6 +46,18 @@ Route::group(['middleware' => 'auth'], function()
     'uses' => 'BarangController@export_barang'
   	]);
 
+  	Route::post('penjualan/export-penjualan', [
+  	'middleware' => ['auth'],
+    'as'   => 'penjualan.export_penjualan',
+    'uses' => 'PenjualanController@export_penjualan'
+  	]);
+
+  	Route::post('penjualan/filter-penjualan', [
+  	'middleware' => ['auth'],
+    'as'   => 'penjualan.filter_penjualan',
+    'uses' => 'PenjualanController@filter_penjualan'
+  	]);
+
 	Route::get('master-barang/filter-satuan-barang/{id}',[
 	'middleware' => ['auth'],
 	'as' => 'master-barang.filter_satuan_barang',

@@ -15,7 +15,28 @@
 				</div>
 
 				<div class="panel-body"> 
-					<p> <a class="btn btn-primary" href="{{ route('penjualan.create') }}">Tambah Penjualan</a> </p>  
+					<p> <a class="btn btn-primary" href="{{ route('penjualan.create') }}">Tambah Penjualan</a> 
+						  <button data-toggle="collapse" data-target="#export" id="button_export" class="btn btn-primary"> <span class="glyphicon glyphicon-export"></span> Export</button>
+				<!-- MEMBUAT FILTER PENJADWALAN -->
+					 <button data-toggle="collapse" data-target="#filter" id="button_filter" class="btn btn-primary"> <span class="glyphicon glyphicon-filter"></span> Filter</button> 
+					 <a class="btn btn-primary" href="{{ route('penjualan.index') }}"> <span class="glyphicon glyphicon-remove"></span>  Hapus Filter</a> 
+				<!-- //MEMBUAT FILTER PENJADWALAN --> </p> 
+						  <br>
+				<!-- MEMBUAT FILTER EXPORT PENJUALAN -->
+					<div  id="export"   style="display:none;">
+					{!! Form::open(['url' => route('penjualan.export_penjualan'),'method' => 'post', 'class'=>'form-inline']) !!}
+					@include('penjualan._form_export')
+					{!! Form::close() !!}
+					</div> 
+				<!-- //MEMBUAT FILTER EXPORT PENJUALAN -->
+				<!-- MEMBUAT FILTER PENJUALAN -->
+					<div  id="filter"   style="display:none;">
+					{!! Form::open(['url' => route('penjualan.export_penjualan'),'method' => 'post', 'class'=>'form-inline']) !!}
+					@include('penjualan._form_filter')
+					{!! Form::close() !!}
+					</div> 
+				<!-- //MEMBUAT FILTER PENJUALAN -->
+				<br> 
 					<div class="table-responsive">
 					{!! $html->table(['class'=>'table-striped table']) !!}
 					</div>
@@ -37,5 +58,23 @@
 		var c = confirm(text);
 		return c;
 	}); 
+</script>
+
+<script type="text/javascript">
+$(document.body).on('click', '#button_filter', function () {
+	$("#filter").show();
+	$("#export").hide();
+	});
+$(document.body).on('click', '#button_export', function () {
+	$("#export").show();
+	$("#filter").hide();
+	});  
+</script>
+
+<script type="text/javascript">  
+$('.datepicker').datepicker({
+    format: 'dd/mm/yyyy', 
+    autoclose: true,
+});  
 </script>
 @endsection

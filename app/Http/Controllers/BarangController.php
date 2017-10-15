@@ -41,6 +41,8 @@ class BarangController extends Controller
                       $kelontongan = "Kelontongan Biasa";
                    }elseif ($barang->kelontongan == 'kelontongan_unik') {
                        $kelontongan = "Kelontongan Unik";
+                   }elseif ($barang->kelontongan == '') {
+                       $kelontongan = "-";
                    }
                     return $kelontongan;
 
@@ -82,6 +84,8 @@ class BarangController extends Controller
                       $kelontongan = "Kelontongan Biasa";
                    }elseif ($barang->kelontongan == 'kelontongan_unik') {
                        $kelontongan = "Kelontongan Unik";
+                   }elseif ($barang->kelontongan == '') {
+                       $kelontongan = "-";
                    }
                     return $kelontongan;
 
@@ -123,6 +127,8 @@ class BarangController extends Controller
                       $kelontongan = "Kelontongan Biasa";
                    }elseif ($barang->kelontongan == 'kelontongan_unik') {
                        $kelontongan = "Kelontongan Unik";
+                   }elseif ($barang->kelontongan == '') {
+                       $kelontongan = "-";
                    }
                     return $kelontongan;
 
@@ -169,6 +175,8 @@ class BarangController extends Controller
                       $kelontongan = "Kelontongan Biasa";
                    }elseif ($barang->kelontongan == 'kelontongan_unik') {
                        $kelontongan = "Kelontongan Unik";
+                   }elseif ($barang->kelontongan == '') {
+                       $kelontongan = "-";
                    }
                     return $kelontongan;
 
@@ -307,7 +315,6 @@ class BarangController extends Controller
             'harga_barang'     => 'required',
             'id_satuan_barang'     => 'required|exists:satuan_barangs,id',
             'id_kategori_barang'     => 'required|exists:kategori_barangs,id',
-            'kelontongan'     => 'required',
             'jumlah_barang'     => 'required', 
             ]);
 
@@ -373,7 +380,6 @@ class BarangController extends Controller
             'harga_barang'     => 'required',
             'id_satuan_barang'     => 'required|exists:satuan_barangs,id',
             'id_kategori_barang'     => 'required|exists:kategori_barangs,id',
-            'kelontongan'     => 'required',
             'jumlah_barang'     => 'required', 
             ]);
 
